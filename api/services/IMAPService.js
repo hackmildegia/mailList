@@ -77,11 +77,7 @@ var IMAPService = {
           var subject = mail.subject;
 
           var fromLength = from.length;
-
-          // console.log(from[0].address);
-          // console.log(in_array('van', ['Kevin', 'van', 'Zonneveld']));
-          // console.log(in_array(from, ['email@domain.com', 'a@a.com', 'b@a.com', 'c@a.com']));
-          
+  
           var listPromise =  new Promise(function (resolve, reject) {            
             List
                 .findOne({
@@ -91,24 +87,18 @@ var IMAPService = {
             })
             .populate('members')
             .exec(function(err, list) {
-              // res.json(list);
               resolve(list)
             });
           });
             
           listPromise.then(function(list){
-            // console.log(1);
-            // console.log(list);
 
             var memberEmails = [];
 
             _.each(list.members, function(member) {
               memberEmails.push(member.email);
             });
-            // console.log(2);
-            // console.log(memberEmails);
-          // for (var i = 0; i < fromLength; i++) { 
-            // if (from in listUsers) {
+
             if (in_array(from[0].address, memberEmails)) {
               // send email.
               console.log("SEND EMAIL");
@@ -134,10 +124,7 @@ var IMAPService = {
               // send the message and get a callback with an error or details of the message that was sent
               server.send(message, function(err, message) { console.log(err || message); });
             
-            } else {
-              console.log("SEND TO MODERATE")
             }
-          // }
         });
 
         });
@@ -146,33 +133,10 @@ var IMAPService = {
           console.log(attachment.path);
         });
 
-        // it's possible to access imap object from node-imap library for performing additional actions. E.x.
-        // nodemailListener.imap.move(:msguids, :mailboxes, function(){})
-
         function in_array(needle, haystack, argStrict) {
-          //  discuss at: http://phpjs.org/functions/in_array/
-          // original by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
-          // improved by: vlado houba
-          // improved by: Jonas Sciangula Street (Joni2Back)
-          //    input by: Billy
-          // bugfixed by: Brett Zamir (http://brett-zamir.me)
-          //   example 1: in_array('van', ['Kevin', 'van', 'Zonneveld']);
-          //   returns 1: true
-          //   example 2: in_array('vlado', {0: 'Kevin', vlado: 'van', 1: 'Zonneveld'});
-          //   returns 2: false
-          //   example 3: in_array(1, ['1', '2', '3']);
-          //   example 3: in_array(1, ['1', '2', '3'], false);
-          //   returns 3: true
-          //   returns 3: true
-          //   example 4: in_array(1, ['1', '2', '3'], true);
-          //   returns 4: false
-
           var key = '',
           strict = !! argStrict;
 
-          //we prevent the double check (strict && arr[key] === ndl) || (!strict && arr[key] == ndl)
-          //in just one for, in order to improve the performance 
-          //deciding wich type of comparation will do before walk array
           if (strict) {
             for (key in haystack) {
               if (haystack[key] === needle) {

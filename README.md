@@ -5,9 +5,11 @@ Mail list manager coded on sailsjs. We use those npm packages:
    * emailjs for sending emails
 
 
-=== Configuration ===
+=== Instalation ===
 
-Add this to app/local.js:
+1. npm install.
+
+2. Add this to app/local.js:
 
 	mailListener: {
         username: 'email@domain.com',
@@ -16,3 +18,11 @@ Add this to app/local.js:
         port: 993,
         mailbox: "INBOX", // mailbox to monitor
     }
+
+3. sails lift to start mailList.
+
+=== Administration ==
+
+One admin created. Its username is **admin** and password **adminadmin**. 
+
+You can login on http://localhost:1337/login

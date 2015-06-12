@@ -1,0 +1,33 @@
+<div class="container">
+
+	<h3>Members </h3>
+	<h4>Add new member(s) to list</h4>
+	<form method="POST" action="/list/<%= id %>/add">	
+		<!-- <textarea rows="4" cols="50" name="users"></textarea> -->
+		<input type="email" name="users[]">
+		<input type="email" name="users[]">
+		<input type="email" name="users[]">
+		<input type="submit" value="Add">
+	</form>
+
+	<p>Those are the members list:</p>
+	<table class="table">
+		<tr>
+			<!-- <th>ID</th> -->
+			<!-- <th>Name</th> -->
+			<th>Email</th>
+			<th></th>
+		</tr>
+
+		<% _.each(members, function(member) { %>
+			<tr>
+			<% _.each(member.members, function(mem) { %>
+				<!-- <td><%= mem.id %></td> -->
+				<!-- <td><a href="/user/show/<%= mem.id %>" title="show user <%= mem.id %>"><%= mem.name %></a></td> -->
+				<td><%= mem.email %></td>
+				<td>&nbsp;</td>
+			</tr>
+			<% }) %>
+		<% }) %>
+
+	</table>

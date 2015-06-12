@@ -69,8 +69,6 @@ var IMAPService = {
 
          */
         mailListener.on("mail", function(mail, seqno, attributes){
-          // console.log(mail);
-          
           var from = mail.from;
           var listEmail = mail.to;
           var text = mail.text;
@@ -152,7 +150,7 @@ var IMAPService = {
           }
 
           return false;
-        } // in_array
+        }
     }
 }
 

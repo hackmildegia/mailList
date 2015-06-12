@@ -1,0 +1,20 @@
+<div class="container">
+	<h3>Lists</h3>
+	<table class="table">
+		<tr>
+			<th>ID</th>
+			<th>Email</th>
+			<th>Members</th>
+			<th></th>
+		</tr>
+
+		<% _.each(lists, function(list) { %>
+			<tr data-id="<%= list.id %>" data-model="list">
+				<td><%= list.id %></td>
+				<td><%= list.email %></td>
+				<td><a href="/list/members/<%= list.id %>" class="btn btn-sm btn-primary">Members</a></td>
+			</tr>
+
+		<% }) %>
+
+	</table>

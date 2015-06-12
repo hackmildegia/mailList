@@ -19,25 +19,27 @@ module.exports = {
   },
 
   members: function (req, res, next) {
-    var members = '';
+      var members = '';
 
-    List.find(req.param('id')).populate('members').exec(
-      function(err, list) { 
-        if (err) { 
-          res.negotiate(err); 
-        } else { 
-          // res.ok(list);
-          res.view( {
-            members: list
-          });
-        } 
-    })
-  },
+      List.find(req.param('id')).populate('members').exec(
+        function(err, list) { 
+          if (err) { 
+            res.negotiate(err); 
+          } else { 
+            // res.ok(list);
+            res.view( {
+              members: list,
+              id:req.param('id')
+            });
+          } 
+      })
+    },
 
   addMembers: function (req, res, next) {
       var id = req.param('id');
       var emails = req.param('users');
-      
+      emails = emails.filter(Boolean);
+      // TODO: borrar los vacios.
       var listPromise =  new Promise(function (resolve, reject) {            
         List.findOne(id)
         .populate('members')
@@ -48,18 +50,22 @@ module.exports = {
       });
         
       listPromise.then(function(list){
-        console.log(1);
-        res.ok();
-        
-        var memberEmails = _.map(list.members, function(member){
-          return member.email
-        });
+        // console.log(1);
+        // res.ok();
+        var memberEmails = {};
+        if (list.members.length > 0) {
+          var memberEmails = _.map(list.members, function(member){
+            return member.email;
+          });
+        }
 
         var newMembers = _.difference(emails, memberEmails);
-// console.log(newMembers);
+ // console.log(emails);
         if (newMembers.length > 0) {
          
           _.each(newMembers, function(email) {
+            console.log("aa");
+            console.log(email);
             User
               .findOne({
                   where: {
@@ -67,16 +73,16 @@ module.exports = {
                   }
               })
               .exec(function(err, existingUser) {
-                console.log(existingUser)
+                // console.log(existingUser)
                 var userPromise =  new Promise(function (resolve, reject) { 
                   if(existingUser) {
                     resolve(existingUser);
                   } else {
                     console.log("creating user...")
                     User.create({email:email}).exec(function(err, newuser) {
-                       console.log(err);
+                     //  console.log(err);
                      console.log("newuser");
-                      console.log(newuser);
+                     // console.log(newuser);
                       resolve(newuser);
                     })
                   }
@@ -89,6 +95,9 @@ module.exports = {
               });
           })
         }
+
+        res.redirect('/list/' + id + '/members');
+
       });
     }
 };
